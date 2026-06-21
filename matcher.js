@@ -42,6 +42,22 @@ function extractMatches(content, regexText, options = {}) {
   return results;
 }
 
+function normalizePrefixValue(prefix, value) {
+  if (typeof prefix !== 'string' || !prefix.trim()) {
+    return value;
+  }
+  const p = prefix.trim().replace(/\/+$/, '');
+  const v = value.replace(/^\/+/, '');
+  return `${p}/${v}`;
+}
+
+function applyPrefixToMatches(matches, prefix) {
+  if (typeof prefix !== 'string' || !prefix.trim()) {
+    return matches;
+  }
+  return matches.map(match => normalizePrefixValue(prefix, match));
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { extractMatches };
+  module.exports = { extractMatches, normalizePrefixValue, applyPrefixToMatches };
 }
